@@ -1,0 +1,21 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Jaspur\\LocalizedExceptions\\": "src/"
+        }
+    },
+    "description": "A custom exception handler package for Laravel.",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jaspur\\LocalizedExceptions\\LocalizedExceptionsServiceProvider"
+            ]
+        }
+    },
+    "name": "jaspur/localized-exceptions",
+    "require": {
+        "illuminate/support": "^11.0",
+        "php": "^8.2"
+    },
+    "type": "library"
+}
