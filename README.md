@@ -83,12 +83,6 @@ public function render($request, Throwable $exception): Response
 
 ---
 
-## ⚙️ Customizing the Prefix
-
-To change the localization behavior or adjust how exceptions are handled, you can edit the `LocalizedExceptionHandler` class in the `src/` directory of this package.
-
----
-
 ## 🧪 Testing
 
 You can test the package by throwing an exception in your Laravel app, like this:
