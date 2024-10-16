@@ -146,20 +146,11 @@ class LocalizedExceptionHandler extends BaseHandler
     protected function buildValidationResponse($request, ValidationException $exception): Response
     {
         $statusCode = 422;
-        $errors = $exception->errors();
 
-        if ($request->wantsJson()) {
-            return response()->json(data: [
-                'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
-                'errors' => $errors,
-                'status' => $statusCode,
-            ], status: $statusCode);
-        }
-
-        return response(content: view(view: "errors::{$statusCode}", data: [
-            'code' => $statusCode,
-            'errors' => $errors,
-            'exception' => $exception,
-        ]), status: $statusCode);
+        return response()->json(data: [
+            'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
+            'errors' => $exception->errors(),
+            'status' => $statusCode,
+        ], status: $statusCode);
     }
 }
