@@ -101,7 +101,7 @@ class LocalizedExceptionHandler extends BaseHandler
             ], status: $statusCode);
         }
 
-        return response(content: view("errors.{$statusCode}", data: [
+        return response(content: view("errors::{$statusCode}", data: [
             'code' => $statusCode,
             'message' => $message,
             'exception' => $exception,
@@ -131,7 +131,7 @@ class LocalizedExceptionHandler extends BaseHandler
             ], status: $statusCode);
         }
 
-        return response(content: view(view: 'errors::validation', data: [
+        return response(content: view(view: "errors::{$statusCode}", data: [
             'code' => $statusCode,
             'errors' => $errors,
             'exception' => $exception,
