@@ -101,11 +101,47 @@ class LocalizedExceptionHandler extends BaseHandler
             ], status: $statusCode);
         }
 
-        return response(content: view("errors::{$statusCode}", data: [
+        return response(content: view($this->getResponseView($statusCode), data: [
             'code' => $statusCode,
             'message' => $message,
             'exception' => $exception,
         ]), status: $statusCode);
+    }
+
+    /**
+     * Get the appropriate error response view based on the given status code.
+     *
+     * This method attempts to find a view for the specified status code in the following order:
+     * 1. "errors.{statusCode}"
+     * 2. "errors::{statusCode}"
+     * 3. "errors::{statusCode}xx"
+     * 
+     * If none of these views exist, it defaults to "errors::minimal".
+     *
+     * @param int|string $statusCode The HTTP status code for which to retrieve the error view.
+     * @return string The path to the error view.
+     */
+    private function getResponseView(int|string $statusCode): string
+    {
+        $view = "errors.$statusCode";
+
+        if (view()->exists($view)) {
+            return $view;
+        }
+
+        $view = "errors::$statusCode";
+
+        if (view()->exists($view)) {
+            return $view;
+        }
+
+        $view = substr($view, 0, -2) . 'xx';
+
+        if (view()->exists($view)) {
+            return $view;
+        }
+
+        return 'errors::minimal';
     }
 
     /**
