@@ -1,32 +1,17 @@
-# Localized Exceptions for Laravel
+# Jaspur Localized Exceptions ✨
 
-[![Latest Stable Version](https://poser.pugx.org/jaspur/localized-exceptions/v/stable)](https://packagist.org/packages/jaspur/localized-exceptions)
-[![License](https://poser.pugx.org/jaspur/localized-exceptions/license)](https://packagist.org/packages/jaspur/localized-exceptions)
+A custom exception handler package for Laravel that provides localized error messages for HTTP exceptions.
 
-## 🌍 Introduction
+## Requirements 📋
 
-**Localized Exceptions** is a Laravel package that automatically localizes exception messages using Laravel's `__()` translation helper. This package is helpful for ensuring exception messages are properly translated according to the application's current locale.
+To use this package, you need:
 
-For example, when an exception is thrown, its message will be passed through the translation system, allowing you to display the message in the user's preferred language.
+-   **PHP**: ^8.2
+-   **Laravel**: ^11.0
 
----
+Ensure you have the correct versions installed to avoid compatibility issues.
 
-## 🚀 Features
-
--   Translates exception messages using the `__()` helper from Laravel.
--   Seamless integration with Laravel's exception handling system.
--   Compatible with Laravel 11.
-
----
-
-## 🛠️ Requirements
-
--   **PHP**: 8.2 or higher
--   **Laravel**: 11
-
----
-
-## 📦 Installation
+## Installation 📦
 
 To install the package, use Composer:
 
@@ -34,93 +19,62 @@ To install the package, use Composer:
 composer require jaspur/localized-exceptions
 ```
 
----
+## Service Provider ⚙️
 
-## 📝 Usage
-
-### Automatic Service Provider Discovery
-
-In **Laravel 11**, service providers are automatically discovered, so you don't need to manually register the service provider.
-
-However, if package auto-discovery is disabled, manually register the service provider in `config/app.php`:
+After installation, the service provider will automatically be registered. If you need to manually register it, add the following line to the `providers` array in your `config/app.php`:
 
 ```php
-'providers' => [
-    Jaspur\LocalizedExceptions\LocalizedExceptionsServiceProvider::class,
-],
+Jaspur\LocalizedExceptions\LocalizedExceptionsServiceProvider::class,
 ```
 
-### 💁🏼 How It Works
+## How It Works 🛠️
 
-The package extends Laravel's default exception handler to modify exception messages. It wraps the original exception message in Laravel's `__()` function, allowing the message to be localized based on your application's current language.
+This package overrides Laravel's default exception handling to provide localized messages for various HTTP exceptions. It does this by mapping common HTTP exceptions to their respective status codes and returning appropriate localized messages.
 
----
+### Exception Mapping
 
-## 🔧 Example
+The package maps the following exceptions to their respective HTTP status codes:
 
-After installing the package, exceptions thrown in your Laravel app will automatically be passed through the `__()` function.
+-   **401**: Authentication Failed
+-   **403**: Authorization Denied
+-   **404**: Resource Not Found
+-   **405**: Method Not Allowed
+-   **406**: Not Acceptable
+-   **409**: Conflict
+-   **410**: Gone
+-   **411**: Length Required
+-   **412**: Precondition Failed
+-   **428**: Precondition Required
+-   **422**: Unprocessable Entity
+-   **423**: Locked
+-   **429**: Too Many Requests
+-   **503**: Service Unavailable
+-   **415**: Unsupported Media Type
 
-```php
-throw new \Exception('Test exception');
+When an exception occurs, the package checks if it matches one of the mapped exceptions and returns a localized message accordingly.
+
+### Validation Errors 📝
+
+The package also handles validation exceptions, returning a list of validation errors along with a localized message.
+
+## Localization 🌍
+
+You can customize the error messages by creating language files in the `resources/lang/vendor/jaspur` directory. The package loads translations from the `resources/lang` directory.
+
+## Publishing Translations 📢
+
+If you want to customize the translation files, you can publish them using:
+
+```bash
+php artisan vendor:publish --tag=lang
 ```
 
-If the translation for `'Test exception'` exists in your language files, it will be translated into the appropriate language. If not, the original message will be displayed.
+This will copy the language files to `resources/lang/vendor/jaspur`.
 
-#### How Exceptions Are Handled
+## Contributing 🤝
 
-The `LocalizedExceptionHandler` class overrides the `render` method like so:
+Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.
 
-```php
-public function render($request, Throwable $exception): Response
-{
-    return parent::render($request, new Exception(
-        message: __($exception->getMessage()),
-        code: $exception->getCode(),
-        previous: $exception
-    ));
-}
-```
+## License 📝
 
----
-
-## 🔊 Publishing Language Files
-
-Although the language files are available by default in the package, you might want to publish them to customize the translations. To do this, follow these steps:
-
-1. **Run the Publish Command**
-
-    Use the following Artisan command to publish the language files:
-
-    ```bash
-    php artisan vendor:publish --provider="Jaspur\LocalizedExceptions\LocalizedExceptionsServiceProvider" --tag="lang"
-    ```
-
-    This will copy the language files to your application's `resources/lang/vendor/jaspur/` directory.
-
-2. **Customize the Language Files**
-
-    After publishing, you can find the language files in the `resources/lang/vendor/jaspur/` directory. You can edit these files to customize the translations as needed.
-
----
-
-## 🧪 Testing
-
-You can test the package by throwing an exception in your Laravel app, like this:
-
-```php
-throw new \Exception('Test exception');
-```
-
-If translations exist (e.g., in `resources/lang/nl.json`), the message will be localized based on the current locale.
-
----
-
-## 💡 Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue on GitHub if you have suggestions or run into any issues.
-
----
-
-## 📜 License
-
-This package is open-sourced software licensed under the [MIT license](LICENSE.md).
+This package is licensed under the MIT License.
