@@ -134,14 +134,14 @@ class LocalizedExceptionHandler extends BaseHandler
     }
 
     /**
-     * Build a validation response for a given request and validation exception.
+     * Builds a JSON response for a validation exception.
      *
-     * This method generates an appropriate HTTP response based on the request's
-     * expected format (JSON or HTML) when a validation exception occurs.
+     * This function constructs a response with a 422 status code, including
+     * a localized message, the validation errors, and the status code itself.
      *
-     * @param  \Illuminate\Http\Request  $request  The current HTTP request instance.
-     * @param  ValidationException  $exception  The validation exception instance.
-     * @return \Illuminate\Http\Response The generated HTTP response.
+     * @param \Illuminate\Http\Request $request The current request instance.
+     * @param \Illuminate\Validation\ValidationException $exception The validation exception containing error details.
+     * @return \Illuminate\Http\Response The JSON response with validation error details.
      */
     protected function buildValidationResponse($request, ValidationException $exception): Response
     {
