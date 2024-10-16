@@ -17,9 +17,21 @@ return [
 
     409 => 'Er is een conflict ontstaan bij het verwerken van je aanvraag.',
 
+    410 => 'De opgevraagde bron is niet meer beschikbaar.',
+
+    411 => 'De lengte van de aanvraag is vereist.',
+
+    412 => 'De vooraf gestelde voorwaarde is niet vervuld.',
+
+    428 => 'Een voorwaarde is vereist voor deze aanvraag.',
+
     422 => 'Er zijn problemen met de ingevoerde gegevens.',
 
+    423 => 'De bron is vergrendeld.',
+
     429 => 'Je hebt te veel aanvragen gedaan in een korte tijd.',
+
+    415 => 'Dit type media wordt niet ondersteund.',
 
     500 => 'Er is een interne serverfout opgetreden.',
 
