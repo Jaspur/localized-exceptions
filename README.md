@@ -83,6 +83,26 @@ public function render($request, Throwable $exception): Response
 
 ---
 
+## 🔊 Publishing Language Files
+
+Although the language files are available by default in the package, you might want to publish them to customize the translations. To do this, follow these steps:
+
+1. **Run the Publish Command**
+
+    Use the following Artisan command to publish the language files:
+
+    ```bash
+    php artisan vendor:publish --provider="Jaspur\LocalizedExceptions\LocalizedExceptionsServiceProvider" --tag="lang"
+    ```
+
+    This will copy the language files to your application's `resources/lang/vendor/jaspur/` directory.
+
+2. **Customize the Language Files**
+
+    After publishing, you can find the language files in the `resources/lang/vendor/jaspur/` directory. You can edit these files to customize the translations as needed.
+
+---
+
 ## 🧪 Testing
 
 You can test the package by throwing an exception in your Laravel app, like this:
@@ -107,4 +127,44 @@ This package is open-sourced software licensed under the [MIT license](LICENSE.m
 
 ```
 
+```
+
+Hier is een voorbeeld van een README-bestand dat je kunt gebruiken om te beschrijven hoe gebruikers de taalbestanden van je package kunnen publiceren:
+
+````markdown
+# Localized Exceptions
+
+A custom exception handler package for Laravel.
+
+## Installation
+
+You can install the package via Composer:
+
+```bash
+composer require jaspur/localized-exceptions
+```
+````
+
+## Usage
+
+You can use the translations in your application by calling the `__()` helper function:
+
+```php
+$message = __('http.status.422'); // This will return the translated message for status 422.
+```
+
+## License
+
+This package is licensed under the MIT License.
+
+```
+
+### Uitleg
+
+- **Installation**: Geeft aan hoe de gebruiker de package moet installeren met Composer.
+- **Publishing Language Files**: Biedt duidelijke stappen om de taalbestanden te publiceren, inclusief het Artisan-commando.
+- **Usage**: Toont hoe de gebruiker de vertalingen kan gebruiken in hun applicatie.
+- **License**: Vermeldt de licentie van de package.
+
+Zorg ervoor dat je het README-bestand toevoegt aan de root van je package en dat het bestand duidelijk en informatief is.
 ```
