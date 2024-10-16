@@ -111,23 +111,19 @@ class LocalizedExceptionHandler extends BaseHandler
 
 
     /**
-     * Retrieves the appropriate response view based on the given status code.
+     * Retrieves the appropriate response view based on the provided status code.
      *
-     * This method checks for the existence of specific error views corresponding
-     * to the provided status code. It searches for views in the format of 
-     * "errors.{statusCode}" and "errors::{statusCode}". If a matching view is 
-     * found, it is returned. If no specific view is found, a default view 
-     * 'errors::minimal' is returned.
+     * This function checks if a view exists for the given status code in the
+     * "errors" directory. If a specific view is found, it returns the view name.
+     * Otherwise, it defaults to returning 'errors::minimal'.
      *
-     * @param int|string $statusCode The status code used to determine the response view.
+     * @param int|string $statusCode The status code for which the response view is needed.
      * @return string The name of the view to be used for the response.
      */
     private function getResponseView(int|string $statusCode): string
     {
-        foreach (["errors.$statusCode", "errors::$statusCode"] as $view) {
-            if (View::exists($view) || file_exists(resource_path("views/errors/$statusCode.blade.php"))) {
-                return $view;
-            }
+        if (View::exists($view = "errors.$statusCode") || file_exists(resource_path("views/errors/$statusCode.blade.php"))) {
+            return $view;
         }
 
         return 'errors::minimal';
