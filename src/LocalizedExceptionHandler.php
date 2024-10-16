@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as BaseHandler;
+use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -124,7 +125,7 @@ class LocalizedExceptionHandler extends BaseHandler
     private function getResponseView(int|string $statusCode): string
     {
         foreach (["errors.$statusCode", "errors::$statusCode"] as $view) {
-            if (view()->exists($view)) {
+            if (View::exists($view) || file_exists(resource_path("views/errors/$statusCode.blade.php"))) {
                 return $view;
             }
         }
