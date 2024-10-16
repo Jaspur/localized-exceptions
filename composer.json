@@ -4,7 +4,7 @@
             "Jaspur\\LocalizedExceptions\\": "src/"
         }
     },
-    "description": "A custom exception handler package for Laravel.",
+    "description": "A custom exception handler package for Laravel that provides localized error messages for HTTP exceptions.",
     "extra": {
         "laravel": {
             "providers": [

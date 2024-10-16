@@ -47,9 +47,18 @@ class LocalizedExceptionHandler extends BaseHandler
     ];
 
     /**
-     * Render an exception into an HTTP response.
+     * Renders a response based on the given exception.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * This method checks the type of the exception and returns an appropriate
+     * response. It first checks if the exception matches any class in the
+     * httpExceptionMap and uses the corresponding status code. If the exception
+     * is a ValidationException, it builds a validation response. If it is an
+     * HttpException, it uses the exception's status code. For all other cases,
+     * it defaults to a status code of 500.
+     *
+     * @param  mixed  $request  The current request instance.
+     * @param  Throwable  $exception  The exception to render a response for.
+     * @return Response The constructed response object.
      */
     public function render($request, Throwable $exception): Response
     {
@@ -71,32 +80,43 @@ class LocalizedExceptionHandler extends BaseHandler
     }
 
     /**
-     * Build the HTTP response for the given exception.
+     * Builds a response based on the request type and exception.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * This function generates a JSON response if the request expects JSON,
+     * otherwise it generates an HTML response using a view template.
+     *
+     * @param  mixed  $request  The incoming request object.
+     * @param  Throwable  $exception  The exception that was thrown.
+     * @param  int  $statusCode  The HTTP status code for the response.
+     * @return Response The generated response object.
      */
     protected function buildResponse($request, Throwable $exception, int $statusCode): Response
     {
-        $message = __($exception->getMessage()) ?: __("jaspur::http-statuslist.{$statusCode}");
+        $message = __(key: $exception->getMessage()) ?: __(key: "jaspur::http-statuslist.{$statusCode}");
 
         if ($request->wantsJson()) {
-            return response()->json([
+            return response()->json(data: [
                 'message' => $message,
                 'status' => $statusCode,
-            ], $statusCode);
+            ], status: $statusCode);
         }
 
-        return response(view("errors.{$statusCode}", [
+        return response(content: view("errors.{$statusCode}", data: [
             'code' => $statusCode,
             'message' => $message,
             'exception' => $exception,
-        ]), $statusCode);
+        ]), status: $statusCode);
     }
 
     /**
-     * Build the HTTP response for validation errors.
+     * Build a validation response for a given request and validation exception.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * This method generates an appropriate HTTP response based on the request's
+     * expected format (JSON or HTML) when a validation exception occurs.
+     *
+     * @param  \Illuminate\Http\Request  $request  The current HTTP request instance.
+     * @param  ValidationException  $exception  The validation exception instance.
+     * @return \Illuminate\Http\Response The generated HTTP response.
      */
     protected function buildValidationResponse($request, ValidationException $exception): Response
     {
@@ -104,17 +124,17 @@ class LocalizedExceptionHandler extends BaseHandler
         $errors = $exception->errors();
 
         if ($request->wantsJson()) {
-            return response()->json([
-                'message' => __("jaspur::http-statuslist.{$statusCode}"),
+            return response()->json(data: [
+                'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
                 'errors' => $errors,
                 'status' => $statusCode,
-            ], $statusCode);
+            ], status: $statusCode);
         }
 
-        return response(view('errors::validation', [
+        return response(content: view(view: 'errors::validation', data: [
             'code' => $statusCode,
             'errors' => $errors,
             'exception' => $exception,
-        ]), $statusCode);
+        ]), status: $statusCode);
     }
 }
