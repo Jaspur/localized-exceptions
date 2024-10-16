@@ -123,19 +123,7 @@ class LocalizedExceptionHandler extends BaseHandler
      */
     private function getResponseView(int|string $statusCode): string
     {
-        $view = "errors.$statusCode";
-
-        if (view()->exists($view)) {
-            return $view;
-        }
-
         $view = "errors::$statusCode";
-
-        if (view()->exists($view)) {
-            return $view;
-        }
-
-        $view = substr($view, 0, -2) . 'xx';
 
         if (view()->exists($view)) {
             return $view;

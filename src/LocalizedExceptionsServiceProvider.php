@@ -16,6 +16,7 @@ class LocalizedExceptionsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'jaspur');
+        $this->loadViewsFrom(__DIR__ . '/../../vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views', 'errors');
         $this->publishes([
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/jaspur'),
         ], 'lang');
