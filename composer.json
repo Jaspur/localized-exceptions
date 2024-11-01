@@ -16,7 +16,6 @@
     "name": "jaspur/localized-exceptions",
     "require": {
         "illuminate/auth": "^11.0",
-        "illuminate/foundation": "^11.0",
         "illuminate/support": "^11.0",
         "illuminate/validation": "^11.0",
         "php": "^8.2",
