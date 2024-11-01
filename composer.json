@@ -15,12 +15,7 @@
     "license": "MIT",
     "name": "jaspur/localized-exceptions",
     "require": {
-        "illuminate/auth": "^11.0",
-        "illuminate/support": "^11.0",
-        "illuminate/validation": "^11.0",
-        "php": "^8.2",
-        "symfony/http-foundation": "^6.0",
-        "symfony/http-kernel": "^6.0"
+        "php": "^8.2"
     },
     "type": "library"
 }
