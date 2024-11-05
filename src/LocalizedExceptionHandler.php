@@ -146,22 +146,16 @@ class LocalizedExceptionHandler extends BaseHandler
      *
      * @param \Illuminate\Http\Request $request The current request instance.
      * @param \Illuminate\Validation\ValidationException $exception The validation exception containing error details.
-     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse The JSON response with validation error details.
+     * @return \Illuminate\Http\Response The JSON response with validation error details.
      */
-    protected function buildValidationResponse($request, ValidationException $exception): Response|SymfonyResponse|RedirectResponse
+    protected function buildValidationResponse($request, ValidationException $exception): Response
     {
-        if ($request->wantsJson()) {
-            $statusCode = 422;
+        $statusCode = 422;
 
-            return response()->json(data: [
-                'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
-                'errors' => $exception->errors(),
-                'status' => $statusCode,
-            ], status: $statusCode);
-        }
-
-        return redirect($exception->redirectTo ?? url()->previous())
-            ->withInput(Arr::except($request->input(), $this->dontFlash))
-            ->withErrors($exception->errors(), $request->input('_error_bag', $exception->errorBag));
+        return response()->json(data: [
+            'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
+            'errors' => $exception->errors(),
+            'status' => $statusCode,
+        ], status: $statusCode);
     }
 }
