@@ -141,12 +141,17 @@ class LocalizedExceptionHandler extends BaseHandler
      */
     protected function buildValidationResponse($request, ValidationException $exception): Response
     {
-        $statusCode = 422;
+        if ($request->wantsJson()) {
+            $statusCode = 422;
 
-        return response()->json(data: [
-            'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
-            'errors' => $exception->errors(),
-            'status' => $statusCode,
-        ], status: $statusCode);
+            return response()->json(data: [
+                'message' => __(key: "jaspur::http-statuslist.{$statusCode}"),
+                'errors' => $exception->errors(),
+                'status' => $statusCode,
+            ], status: $statusCode);
+        }
+
+        // Als de aanvraag geen JSON wil, gebruik de standaard Laravel respons
+        return parent::buildValidationResponse($request, $exception);
     }
 }
