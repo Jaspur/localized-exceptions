@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as BaseHandler;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +48,12 @@ class LocalizedExceptionHandler extends BaseHandler
         ServiceUnavailableHttpException::class => 503,
         UnsupportedMediaTypeHttpException::class => 415,
         UnprocessableEntityHttpException::class => 422,
+    ];
+
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
     ];
 
     /**
@@ -138,9 +146,9 @@ class LocalizedExceptionHandler extends BaseHandler
      *
      * @param \Illuminate\Http\Request $request The current request instance.
      * @param \Illuminate\Validation\ValidationException $exception The validation exception containing error details.
-     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response The JSON response with validation error details.
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse The JSON response with validation error details.
      */
-    protected function buildValidationResponse($request, ValidationException $exception): Response|SymfonyResponse
+    protected function buildValidationResponse($request, ValidationException $exception): Response|SymfonyResponse|RedirectResponse
     {
         if ($request->wantsJson()) {
             $statusCode = 422;
@@ -152,7 +160,8 @@ class LocalizedExceptionHandler extends BaseHandler
             ], status: $statusCode);
         }
 
-        // Als de aanvraag geen JSON wil, gebruik de standaard Laravel respons
-        return $exception->response;
+        return redirect($exception->redirectTo ?? url()->previous())
+            ->withInput(Arr::except($request->input(), $this->dontFlash))
+            ->withErrors($exception->errors(), $request->input('_error_bag', $exception->errorBag));
     }
 }
