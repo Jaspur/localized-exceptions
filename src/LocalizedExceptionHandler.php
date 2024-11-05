@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as BaseHandler;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -137,9 +138,9 @@ class LocalizedExceptionHandler extends BaseHandler
      *
      * @param \Illuminate\Http\Request $request The current request instance.
      * @param \Illuminate\Validation\ValidationException $exception The validation exception containing error details.
-     * @return \Illuminate\Http\Response The JSON response with validation error details.
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response The JSON response with validation error details.
      */
-    protected function buildValidationResponse($request, ValidationException $exception): Response
+    protected function buildValidationResponse($request, ValidationException $exception): Response|SymfonyResponse
     {
         if ($request->wantsJson()) {
             $statusCode = 422;
@@ -152,6 +153,6 @@ class LocalizedExceptionHandler extends BaseHandler
         }
 
         // Als de aanvraag geen JSON wil, gebruik de standaard Laravel respons
-        return parent::buildValidationResponse($request, $exception);
+        return $exception->response;
     }
 }
